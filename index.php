@@ -22,17 +22,49 @@
     		</div>
     		<div class="box-content">
     			<p>
-    				Если вы всерьез заинтересованы в эффективности оптимизации своего ресурса, то вам придется постоянно проводить мониторинг состояния сайта. Только в этом случае вы сможете не просто исправить существующие ошибки, но и предотвратить появление новых ошибок в дальнейшем. Анализ сайтов предоставляет уникальную возможность получить исчерпывающую информацию относительно вашего домена и сайта.
+    				В данном сервисе Вы можете проверить в автоматическом режиме сайт по вебметрическим показателям, таким как: количество страниц на сайте, количество ссылок, количество публикаций и количество файлов. Также можно посмотреть количество посещений. Все показания записываются в базу, в дальнейшем можно вывести график. Показания можно вносить вручную
     			</p>
     			<hr>
-    			<form method="post" onsubmit="get_action(this);" class="form-inline form-box">
-    				<button type="submit" class="btn btn-primary pull-right">Проверить</button>
-    				<div style="overflow:hidden;zoom:1;">
-    					<input name="url" type="text" class="form-control" autofocus="autofocus" style="width:96%;" placeholder="Введите сайт...">
-    				</div>
-    			</form>
+                <div id="pop"></div>
+                <div class="but">
+                    <button type="submit" class="btn btn-primary pull-right" id="auto">Автоматический расчет</button>
+                    <button type="submit" class="btn btn-primary pull-right" id="work">Расчет вручную</button>
+                    <button type="submit" class="btn btn-primary pull-right" id="pose">График посещений</button>
+                </div>
+    			<input name="url" type="text" class="form-control" autofocus="autofocus" style="width:50%;" placeholder="Введите сайт..." id="site">
     		</div>
     	</div>
     </div>
+    <script type="text/javascript">
+        $("#auto").on('click',function(){
+        site = $("#site").val();
+        if (site == ''){
+            fos();
+        }
+        else{
+            window.location='/auto.php';
+        }
+    });
+
+    $("#work").on('click',function(){
+        site = $("#site").val();
+        if (site == ''){
+            fos();
+        }
+        else{
+            window.location='/work.php';
+        }
+    }); 
+
+    $("#pose").on('click',function(){
+        site = $("#site").val();
+        if (site == ''){
+            fos();
+        }
+        else{
+            window.location='/pose.php';
+        }
+    });  
+    </script>
 </body>
 </html>
