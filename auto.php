@@ -18,9 +18,11 @@
     <div class="content">
     	<div class="box">
     		<div class="box-title">
-    			<h1>Автоматический расчет</h1>
+    			<h1>Автоматический подсчет вебометрических параметров</h1>
+                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
     		</div>
     	</div>
+        <h2>Выбор параметров</h2>
     </div>
     <script type="text/javascript">
         $("#auto").on('click',function(){

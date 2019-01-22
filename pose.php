@@ -19,6 +19,7 @@
     	<div class="box">
     		<div class="box-title">
     			<h1>График посещений</h1>
+                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
     		</div>
     	</div>
     </div>

@@ -18,7 +18,8 @@
     <div class="content">
     	<div class="box">
     		<div class="box-title">
-    			<h1>Расчет вручную</h1>
+    			<h1>Расчет показалей вручную</h1>
+                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
     		</div>
     	</div>
     </div>
