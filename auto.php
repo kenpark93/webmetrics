@@ -22,7 +22,39 @@
                 <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
     		</div>
     	</div>
-        <h2>Выбор параметров</h2>
+        <br><br><br>
+        <h2 align="center">Выбор параметров</h2>
+        <div class="content">
+            <div class="param">
+                <form>
+                    <div>
+                        <label><input type="checkbox" /> Количество страниц</label>
+                    </div>
+                </form>
+            </div>
+            <div class="param">
+                <form>
+                    <div>
+                        <label><input type="checkbox" /> Количество внешних входящих ссылок</label>
+                    </div>
+                </form>
+            </div>
+            <div class="param">
+                <form>
+                    <div>
+                        <label><input type="checkbox" /> Количество публикаций</label>
+                    </div>
+                </form>
+            </div>
+            <div class="param">
+                <form>
+                    <div>
+                        <label><input type="checkbox" /> Колличество файлов</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <button id="autoras" type="button" class="btn btn-success btn-block">Расчет рейтинга</button>
     </div>
     <script type="text/javascript">
         $("#auto").on('click',function(){

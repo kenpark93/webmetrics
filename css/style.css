@@ -13,6 +13,28 @@
 	margin-top: -45px;
 }
 
-h2{
-	margin: 0 auto;
+.param{
+	padding: 15px;
+	border: 1px solid #3949ab;
+	border-radius: .625rem;
+	background-color: #f2f3fa;
+	width: 60%;
+	margin: auto;
+	margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  padding-left: 20px;
+  text-indent: -20px;
+  font-size: 20pt;
+}
+input {
+  width: 35px;
+  height: 35px;
+  padding: 0;
+  margin:0;
+  vertical-align: bottom;
+  position: relative;
+  *overflow: hidden;
 }
