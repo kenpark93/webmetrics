@@ -18,7 +18,7 @@
 	border: 1px solid #3949ab;
 	border-radius: .625rem;
 	background-color: #f2f3fa;
-	width: 60%;
+	width: 65%;
 	margin: auto;
 	margin-bottom: 1.5rem;
 }
@@ -29,7 +29,12 @@ label {
   text-indent: -20px;
   font-size: 20pt;
 }
-input {
+
+input[type="text"]{
+	width: 60px;
+}
+
+input[type="checkbox"]{
   width: 35px;
   height: 35px;
   padding: 0;
@@ -38,3 +43,4 @@ input {
   position: relative;
   *overflow: hidden;
 }
+
