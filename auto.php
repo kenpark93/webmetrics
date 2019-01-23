@@ -18,7 +18,7 @@
     <div class="content">
     	<div class="box">
     		<div class="box-title">
-    			<h1>Автоматический подсчет вебометрических параметров</h1>
+    			<h1>Автоматический подсчет вебометрических показателей</h1>
                 <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
     		</div>
     	</div>
@@ -54,7 +54,7 @@
                 </form>
             </div>
         </div>
-        <button id="autoras" type="button" class="btn btn-success btn-block">Расчет рейтинга</button>
+        <button id="autoras" type="button" class="btn btn-success btn-block" onclick="window.location='/rate.php'">Расчет показателей</button>
     </div>
     <script type="text/javascript">
         $("#auto").on('click',function(){

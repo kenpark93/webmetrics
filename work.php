@@ -54,7 +54,7 @@
                 </form>
             </div>
         </div>
-        <button id="autoras" type="button" class="btn btn-success btn-block">Расчет рейтинга</button>
+        <button id="autoras" type="button" class="btn btn-success btn-block" onclick="window.location='http://webmetrics.ru'">Расчет показателей</button>
     </div>
     <script type="text/javascript">
         $("#auto").on('click',function(){

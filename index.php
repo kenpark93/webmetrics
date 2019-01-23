@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="/css/style.css" />
 	<link rel="stylesheet" href="/css/bootstrap.css" />
 	<script src="/js/scripts.js"></script>
+    <script src="/js/loader.js"></script>
 	<script src="/js/jquery-3.3.1.slim.min.js"></script>
 	<script src="/js/bootstrap.js"></script>
 	<title>Сервис сбора вебметрических данных</title>
