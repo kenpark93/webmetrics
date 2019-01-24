@@ -19,7 +19,7 @@
     	<div class="box">
     		<div class="box-title">
     			<h1>Автоматический подсчет вебометрических показателей</h1>
-                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
+                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetric.ru'">На главную</button>
     		</div>
     	</div>
         <br><br><br>
@@ -57,6 +57,8 @@
         <button id="autoras" type="button" class="btn btn-success btn-block" onclick="window.location='/rate.php'">Расчет показателей</button>
     </div>
     <script type="text/javascript">
+        let a = localStorage.getItem("site");
+        console.log(a);
         $("#auto").on('click',function(){
         site = $("#site").val();
         if (site == ''){

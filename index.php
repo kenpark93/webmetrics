@@ -37,32 +37,36 @@
     	</div>
     </div>
     <script type="text/javascript">
+        let prov = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
         $("#auto").on('click',function(){
         site = $("#site").val();
-        if (site == ''){
+        if(!prov.test(site)) {
             fos();
         }
         else{
+            localStorage.setItem("site", site);
             window.location='/auto.php';
         }
     });
 
     $("#work").on('click',function(){
         site = $("#site").val();
-        if (site == ''){
+        if(!prov.test(site)){
             fos();
         }
         else{
+            localStorage.setItem("site", site);
             window.location='/work.php';
         }
     }); 
 
     $("#pose").on('click',function(){
         site = $("#site").val();
-        if (site == ''){
+        if(!prov.test(site)){
             fos();
         }
         else{
+            localStorage.setItem("site", site);
             window.location='/pose.php';
         }
     });  

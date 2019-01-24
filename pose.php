@@ -20,16 +20,39 @@
     	<div class="box">
     		<div class="box-title">
     			<h1>График посещений</h1>
-                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
+                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetric.ru'">На главную</button>
     		</div>
     	</div>
-        <h2 align="center">volpi.ru</h2>
+        <h2 align="center"></h2>
         <div id="curve_chart" style="width: 100%; height: 750px" align="center"></div>
     </div>
     <script type="text/javascript">
+      let a = localStorage.getItem("site");
+      let list = [];
+      const dat = (a) => {
+        let b = localStorage.getItem("site");
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = xhttp.responseText;
+            if(response!=null) {
+              list = response;
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+      console.log(b);
+        obj = JSON.stringify({action:"getdat",da:b});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+      dat();
+      $("h2").append(a);
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
-
+      console.log(list);
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
           ['Дата показаний', 'Посещения'],

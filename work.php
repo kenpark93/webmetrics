@@ -19,7 +19,7 @@
     	<div class="box">
     		<div class="box-title">
     			<h1>Расчет показалей вручную</h1>
-                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetrics.ru'">На главную</button>
+                <button id="back" type="button" class="btn btn-primary" onclick="window.location='http://webmetric.ru'">На главную</button>
     		</div>
     	</div>
         <br><br><br>
@@ -28,42 +28,60 @@
             <div class="param">
                 <form>
                     <div>
-                        <label><input type="text" /> Количество страниц</label>
+                        <label><input type="text" id="str"/> Количество страниц</label>
                     </div>
                 </form>
             </div>
             <div class="param">
                 <form>
                     <div>
-                        <label><input type="text" /> Количество внешних входящих ссылок</label>
+                        <label><input type="text" id="link"/> Количество внешних входящих ссылок</label>
                     </div>
                 </form>
             </div>
             <div class="param">
                 <form>
                     <div>
-                        <label><input type="text" /> Количество публикаций</label>
+                        <label><input type="text" id="pub"/> Количество публикаций</label>
                     </div>
                 </form>
             </div>
             <div class="param">
                 <form>
                     <div>
-                        <label><input type="text" /> Колличество файлов</label>
+                        <label><input type="text" id="file"/> Колличество файлов</label>
                     </div>
                 </form>
             </div>
         </div>
-        <button id="autoras" type="button" class="btn btn-success btn-block" onclick="window.location='http://webmetrics.ru'">Расчет показателей</button>
+        <button id="autoras" type="button" class="btn btn-success btn-block">Расчет показателей</button>
     </div>
     <script type="text/javascript">
-        $("#auto").on('click',function(){
-        site = $("#site").val();
-        if (site == ''){
-            fos();
+        let prov = /^\d+$/;
+        let flag = true;
+        $("#autoras").on('click',function(){
+            str = $("#str").val();
+            link = $("#link").val();
+            pub = $("#pub").val();
+            file = $("#file").val();//    это не работает все!!!!!!!!!!
+        if(!prov.test(str)) {
+            foss();
+            flag = false;
         }
-        else{
-            window.location='/auto.php';
+        if(!prov.test(link)) {
+            foss();
+            flag = false;
+        }
+        if(!prov.test(pub)) {
+            foss();
+            flag = false;
+        }
+        if(!prov.test(file)) {
+            foss();
+            flag = false;
+        }
+        if (flag){
+            window.location='/rate.php';
         }
     }); 
     </script>
