@@ -9,4 +9,8 @@ if($action=="getdat"){
 	$response = $myClass->getdat($json);
 	echo json_encode($response);
 }
+if($action=="putpose"){
+	$response = $myClass->putpose($json);
+	echo $response;
+}
 ?>

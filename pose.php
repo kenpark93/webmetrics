@@ -27,41 +27,81 @@
         <div id="curve_chart" style="width: 100%; height: 750px" align="center"></div>
     </div>
     <script type="text/javascript">
+
       let a = localStorage.getItem("site");
-      let list = [];
-      const dat = (a) => {
-        let b = localStorage.getItem("site");
+      const prosm = (a) => {
+      console.log(a);
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function(){
         if (xhttp.readyState==4 && xhttp.status==200) {
             var response = xhttp.responseText;
             if(response!=null) {
-              list = response;
+              console.log(response);
             } else {
               console.log(0);
             }        
         }
       };
-      console.log(b);
-        obj = JSON.stringify({action:"getdat",da:b});
+        obj = JSON.stringify({action:"putpose",domen:a});
         xhttp.open("POST", 'ajax.php', true);
         xhttp.setRequestHeader("Content-Type","application/json");
         xhttp.send(obj);
     };
-      dat();
-      $("h2").append(a);
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
-      console.log(list);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Дата показаний', 'Посещения'],
-          ['04.01.19',  1000],
-          ['08.01.19',  1170],
-          ['15.01.19',  660],
-          ['16.01.19',  1030],
-          ['23.01.19',  750]
-        ]);
+      const dat = (a) => {
+        let b = localStorage.getItem("site");
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = $.parseJSON(xhttp.responseText);
+            if(response!=null) {
+              google.charts.load('current', {'packages':['corechart']});
+              google.charts.setOnLoadCallback(drawChart);
+              pokaz = JSON.parse(response);
+              var count = Object.keys(pokaz).length;
+              function drawChart() {
+                switch (count){
+                  case 1:
+                  var data = google.visualization.arrayToDataTable([
+                    ['Дата показаний', 'Посещения'],
+                    [pokaz[0]["pokaz"],  pokaz[0]["sees"]]
+                  ]);
+                  break;
+                  case 2:
+                  var data = google.visualization.arrayToDataTable([
+                    ['Дата показаний', 'Посещения'],
+                    [pokaz[0]["pokaz"],  pokaz[0]["sees"]],
+                    [pokaz[1]["pokaz"],  pokaz[1]["sees"]]
+                  ]);
+                  break;
+                  case 3:
+                  var data = google.visualization.arrayToDataTable([
+                    ['Дата показаний', 'Посещения'],
+                    [pokaz[0]["pokaz"],  pokaz[0]["sees"]],
+                    [pokaz[1]["pokaz"],  pokaz[1]["sees"]],
+                    [pokaz[2]["pokaz"],  pokaz[2]["sees"]]
+                  ]);
+                  break;
+                  case 4:
+                  var data = google.visualization.arrayToDataTable([
+                    ['Дата показаний', 'Посещения'],
+                    [pokaz[0]["pokaz"],  pokaz[0]["sees"]],
+                    [pokaz[1]["pokaz"],  pokaz[1]["sees"]],
+                    [pokaz[2]["pokaz"],  pokaz[2]["sees"]],
+                    [pokaz[3]["pokaz"],  pokaz[3]["sees"]]
+                  ]);
+                  break;
+                  case 5:
+                  var data = google.visualization.arrayToDataTable([
+                    ['Дата показаний', 'Посещения'],
+                    [pokaz[0]["pokaz"],  pokaz[0]["sees"]],
+                    [pokaz[1]["pokaz"],  pokaz[1]["sees"]],
+                    [pokaz[2]["pokaz"],  pokaz[2]["sees"]],
+                    [pokaz[3]["pokaz"],  pokaz[3]["sees"]],
+                    [pokaz[4]["pokaz"],  pokaz[4]["sees"]]
+                  ]);
+                  break;
+                }
+              
 
         var options = {
           title: 'Посещений в сутки',
@@ -73,6 +113,19 @@
 
         chart.draw(data, options);
       }
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"getdat",da:b});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+    prosm(a);
+      dat();
+      $("h2").append(a);
         $("#auto").on('click',function(){
         site = $("#site").val();
         if (site == ''){

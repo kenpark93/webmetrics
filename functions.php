@@ -42,4 +42,24 @@ function getdat($json)
     }
 }
 
+function putpose($json){
+    global $db_param;
+    $conn = connect_db($db_param);
+    $l=$json->domen;
+    $la = 'https://a.pr-cy.ru/' . $l;
+    $text = file_get_contents( 'https://a.pr-cy.ru/' . $l );
+    preg_match( '/<td class="text-right">(.*?)<\\/td>/is' , $text , $title );
+    $pos = $title[1];
+    $pos = str_replace('&nbsp;', '', $pos);
+    $today = date("Y-m-d");
+    if ($conn != null) {
+        if(!($stmt=$conn->prepare("INSERT into views (domen,pokaz,sees) values($l,$today,$pos)"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        } 
+        $res =  $stmt->execute();       
+        $stmt->close();
+    }
+    return $today;
+}
+
 }
