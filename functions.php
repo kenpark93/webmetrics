@@ -45,21 +45,33 @@ function getdat($json)
 function putpose($json){
     global $db_param;
     $conn = connect_db($db_param);
+    $flag = true;
     $l=$json->domen;
     $la = 'https://a.pr-cy.ru/' . $l;
     $text = file_get_contents( 'https://a.pr-cy.ru/' . $l );
     preg_match( '/<td class="text-right">(.*?)<\\/td>/is' , $text , $title );
     $pos = $title[1];
-    $pos = str_replace('&nbsp;', '', $pos);
+    $pose=preg_replace("/[^x\d|*\.]/","",$pos);
     $today = date("Y-m-d");
-    if ($conn != null) {
-        if(!($stmt=$conn->prepare("INSERT into views (domen,pokaz,sees) values($l,$today,$pos)"))) {
+    $que = "SELECT id FROM views where pokaz = $today AND domen = $l";
+    $result = mysqli_query($conn, $que);
+    if ($flag==true){
+        if ($conn != null) {
+        if(!($stmt=$conn->prepare("insert into views (domen,pokaz,sees) values(?,?,?)"))) {
             echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
-        } 
+        }
+        if(!$stmt->bind_param('sss',$a,$b,$c)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $a=$l;
+        $b=$today ;  
+        $c=$pose;
         $res =  $stmt->execute();       
         $stmt->close();
     }
-    return $today;
+    }
+    
+    return $result;
 }
 
 }

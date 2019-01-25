@@ -37,6 +37,7 @@
             var response = xhttp.responseText;
             if(response!=null) {
               console.log(response);
+              location.reload()
             } else {
               console.log(0);
             }        
