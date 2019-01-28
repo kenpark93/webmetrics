@@ -13,4 +13,8 @@ if($action=="putpose"){
 	$response = $myClass->putpose($json);
 	echo $response;
 }
+if($action=="hand"){
+	$response = $myClass->hand($json);
+	echo $response;
+}
 ?>

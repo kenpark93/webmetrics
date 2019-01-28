@@ -74,4 +74,26 @@ function putpose($json){
     return $result;
 }
 
+function hand($json){
+    global $db_param;
+    $conn = connect_db($db_param);
+        if ($conn != null) {
+        if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('sssss',$a,$b,$c,$d,$e)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $a=$json->domen;
+        $b=$json->str;  
+        $c=$json->pub;
+        $d=$json->link;
+        $e=$json->file;
+        $res =  $stmt->execute();       
+        $stmt->close();
+    }
+    
+    return $result;
+}
+
 }

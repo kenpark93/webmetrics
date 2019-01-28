@@ -58,6 +58,7 @@
         <button id="autoras" type="button" class="btn btn-success btn-block">Расчет показателей</button>
     </div>
     <script type="text/javascript">
+        let a = localStorage.getItem("site");
         let prov = /^\d+$/;
         let flag = true;
         $("#autoras").on('click',function(){
@@ -106,10 +107,30 @@
             flag = false;
         }
         if (flag){
+            prosm(a);
             window.location='/rate.php';
         }
         flag = true;
     }); 
+
+      const prosm = (a) => {
+      console.log(a);
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = xhttp.responseText;
+            if(response!=null) {
+              console.log(response);
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"hand",domen:a,str:str,pub:pub,link:link,file:file});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
     </script>
 </body>
 </html>
