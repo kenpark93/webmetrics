@@ -54,6 +54,7 @@
                 </form>
             </div>
         </div>
+        <div id="pop"></div>
         <button id="autoras" type="button" class="btn btn-success btn-block">Расчет показателей</button>
     </div>
     <script type="text/javascript">
@@ -63,26 +64,51 @@
             str = $("#str").val();
             link = $("#link").val();
             pub = $("#pub").val();
-            file = $("#file").val();//    это не работает все!!!!!!!!!!
-        if(!prov.test(str)) {
+            file = $("#file").val();
+        if (str != ''){
+            if(!prov.test(str)) {
             foss();
             flag = false;
         }
-        if(!prov.test(link)) {
+        }
+        else{
+            str = 0;
+        }
+        if (link != ''){
+            if(!prov.test(link)) {
             foss();
             flag = false;
         }
-        if(!prov.test(pub)) {
+        }
+        else{
+            link = 0;
+        }
+        if (pub != ''){
+            if(!prov.test(pub)) {
             foss();
             flag = false;
         }
-        if(!prov.test(file)) {
+        }
+        else{
+            pub = 0;
+        }
+        if (file != ''){
+            if(!prov.test(file)) {
             foss();
+            flag = false;
+        }
+        }
+        else{
+            file = 0;
+        }
+        if (str == 0 && link == 0 && pub == 0 && file == 0){
+            ale();
             flag = false;
         }
         if (flag){
             window.location='/rate.php';
         }
+        flag = true;
     }); 
     </script>
 </body>

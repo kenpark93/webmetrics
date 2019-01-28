@@ -37,7 +37,6 @@
             var response = xhttp.responseText;
             if(response!=null) {
               console.log(response);
-              location.reload()
             } else {
               console.log(0);
             }        
@@ -91,7 +90,7 @@
                     [pokaz[3]["pokaz"],  pokaz[3]["sees"]]
                   ]);
                   break;
-                  case 5:
+                  default:
                   var data = google.visualization.arrayToDataTable([
                     ['Дата показаний', 'Посещения'],
                     [pokaz[0]["pokaz"],  pokaz[0]["sees"]],
