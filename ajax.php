@@ -17,4 +17,8 @@ if($action=="hand"){
 	$response = $myClass->hand($json);
 	echo $response;
 }
+if($action=="avto"){
+	$response = $myClass->avto($json);
+	echo $response;
+}
 ?>

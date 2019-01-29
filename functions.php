@@ -96,4 +96,33 @@ function hand($json){
     return $result;
 }
 
+function avto($json){
+    $a=$json->domen;
+    $b=$json->str;  
+    $c=$json->pub;
+    $d=$json->link;
+    $e=$json->file;
+    $la = 'https://www.google.com/search?q=site:' . $a;
+    if ($b == 1){
+        $text = file_get_contents( 'https://www.google.com/search?q=site:' . $a );
+        preg_match('/\s[\d]{1}\s[\d]{3}/', $text, $page );
+        $pos = $page[0];
+        $pose=preg_replace("/[^x\d|*\.]/","",$pos);
+    }
+    global $db_param;
+    $conn = connect_db($db_param);
+    //    if ($conn != null) {
+    //    if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
+    //        echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+    //    }
+    //    if(!$stmt->bind_param('sssss',$a,$b,$c,$d,$e)) {
+    //        echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+    //    }
+    //    $res =  $stmt->execute();       
+    //    $stmt->close();
+    //}
+    
+    return $pose;
+}
+
 }
