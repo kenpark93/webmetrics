@@ -102,7 +102,7 @@ function avto($json){
     $c=$json->pub;
     $d=$json->link;
     $e=$json->file;
-    $la = 'https://www.google.com/search?q=link:' . $a;
+    $la = 'https://www.google.com/search?rlz=1C1GCEA_enRU774RU774&ei=jbVRXLv0JciyswGxlYjgAw&q=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&oq=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&gs_l=psy-ab.3...6311.39771..40939...0.0..0.147.488.9j1......0....2j1..gws-wiz.b1U7i4a0yHM';
     if ($b == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=site:' . $a );
         preg_match('/\s[\d]{1}\s[\d]{3}/', $text, $page );
@@ -121,20 +121,26 @@ function avto($json){
         $pos = $page[0];
         $link=preg_replace("/[^x\d|*\.]/","",$pos);
     }
+    if ($e == 1){
+        $text = file_get_contents( 'https://www.google.com/search?rlz=1C1GCEA_enRU774RU774&ei=jbVRXLv0JciyswGxlYjgAw&q=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&oq=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&gs_l=psy-ab.3...6311.39771..40939...0.0..0.147.488.9j1......0....2j1..gws-wiz.b1U7i4a0yHM');
+        preg_match('/\s[\d]{3}\s[\d]{3}/', $text, $page );
+        $pos = $page[0];
+        $file=preg_replace("/[^x\d|*\.]/","",$pos);
+    }
     global $db_param;
     $conn = connect_db($db_param);
-    //    if ($conn != null) {
-    //    if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
-    //        echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
-    //    }
-    //    if(!$stmt->bind_param('sssss',$a,$b,$c,$d,$e)) {
-    //        echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
-    //    }
-    //    $res =  $stmt->execute();       
-    //    $stmt->close();
-    //}
+        if ($conn != null) {
+        if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('sssss',$a,$str,$pub,$link,$file)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $res =  $stmt->execute();       
+        $stmt->close();
+    }
     
-    return $link;
+    return $res;
 }
 
 }
