@@ -102,12 +102,18 @@ function avto($json){
     $c=$json->pub;
     $d=$json->link;
     $e=$json->file;
-    $la = 'https://www.google.com/search?q=site:' . $a;
+    $la = 'https://scholar.google.ru/scholar?hl=ru&as_sdt=0%2C5&q=' . $a;
     if ($b == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=site:' . $a );
         preg_match('/\s[\d]{1}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
-        $pose=preg_replace("/[^x\d|*\.]/","",$pos);
+        $str=preg_replace("/[^x\d|*\.]/","",$pos);
+    }
+    if ($c == 1){
+        $text = file_get_contents( 'https://scholar.google.ru/scholar?hl=ru&as_sdt=0%2C5&q=' . $a );
+        preg_match('/\s[\d]{2}\s[\d]{3}/', $text, $page );
+        $pos = $page[0];
+        $pub=preg_replace("/[^x\d|*\.]/","",$pos);
     }
     global $db_param;
     $conn = connect_db($db_param);
@@ -122,7 +128,7 @@ function avto($json){
     //    $stmt->close();
     //}
     
-    return $pose;
+    return $str;
 }
 
 }

@@ -97,7 +97,7 @@
       xhttp.onreadystatechange = function(){
         if (xhttp.readyState==4 && xhttp.status==200) {
             var response = xhttp.responseText;
-            if(response!="") {
+            if(response!=null) {
               console.log(response);
             } else {
               console.log(0);
