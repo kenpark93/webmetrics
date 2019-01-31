@@ -105,25 +105,25 @@ function avto($json){
     $la = 'https://www.google.com/search?rlz=1C1GCEA_enRU774RU774&ei=jbVRXLv0JciyswGxlYjgAw&q=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&oq=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&gs_l=psy-ab.3...6311.39771..40939...0.0..0.147.488.9j1......0....2j1..gws-wiz.b1U7i4a0yHM';
     if ($b == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=site:' . $a );
-        preg_match('/\s[\d]{1}\s[\d]{3}/', $text, $page );
+        preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $str=preg_replace("/[^x\d|*\.]/","",$pos);
     }
     if ($c == 1){
         $text = file_get_contents( 'https://scholar.google.ru/scholar?hl=ru&as_sdt=0%2C5&q=' . $a );
-        preg_match('/\s[\d]{2}\s[\d]{3}/', $text, $page );
+        preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $pub=preg_replace("/[^x\d|*\.]/","",$pos);
     }
     if ($d == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=link:' . $a );
-        preg_match('/\s[\d]{3}\s[\d]{3}/', $text, $page );
+        preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $link=preg_replace("/[^x\d|*\.]/","",$pos);
     }
     if ($e == 1){
         $text = file_get_contents( 'https://www.google.com/search?rlz=1C1GCEA_enRU774RU774&ei=jbVRXLv0JciyswGxlYjgAw&q=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&oq=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&gs_l=psy-ab.3...6311.39771..40939...0.0..0.147.488.9j1......0....2j1..gws-wiz.b1U7i4a0yHM');
-        preg_match('/\s[\d]{3}\s[\d]{3}/', $text, $page );
+        preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $file=preg_replace("/[^x\d|*\.]/","",$pos);
     }
@@ -141,6 +141,34 @@ function avto($json){
     }
     
     return $res;
+}
+
+function data()
+{
+    global $db_param;
+    $conn = connect_db($db_param);
+
+    if ($conn != null) {
+        if(!($stmt=$conn->prepare("SELECT rate, domen, str, pub, link, file FROM rating, pokaz WHERE pokaz.id IN (SELECT MAX(pokaz.id) FROM pokaz GROUP BY pokaz.domain) AND pokaz.domain = rating.domen"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->execute()) {
+            echo "Не удалось выполнить запрос: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        if(!($res=$stmt->get_result())) {
+            echo "Не удалось получить результат: (" . $stmt->errno . ") " . $stmt->error;
+        } else {
+            if($res>0){
+                $gradInfo=array();
+                while($bi=mysqli_fetch_array($res))
+                    $gradInfo[]=$bi;                
+            } else {
+                return null;
+            }
+        }
+        $stmt->close();
+        return json_encode($gradInfo);
+    }
 }
 
 }

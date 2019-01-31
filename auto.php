@@ -90,6 +90,7 @@
         }
         console.log(str + " " + link + " " + pub + " " + file);
         auutoo(a, str, link, pub, file);
+        window.location='/rate.php';
     }); 
         const auutoo = (a, str, link, pub, file) => {
       console.log(a);

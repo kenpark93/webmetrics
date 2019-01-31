@@ -24,9 +24,10 @@
     		</div>
     	</div>
       <br><br><br>
-      <table class="table table-inverse">
+      <table class="table table-inverse" id="table1">
   <thead>
     <tr>
+      <th>Место</th>
       <th>Сайт ВУЗа</th>
       <th>Количество страниц</th>
       <th>Количество публикаций</th>
@@ -35,28 +36,50 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>volpi.ru</td>
-      <td>7216</td>
-      <td>416</td>
-      <td>202000</td>
-      <td>3150</td>
-    </tr>
+
   </tbody>
 </table>
 <br><br><br>
       <button id="autoras" type="button" class="btn btn-success btn-block">Визуализации рейтинга</button>
     </div>
     <script type="text/javascript">
-        $("#auto").on('click',function(){
-        site = $("#site").val();
-        if (site == ''){
-            fos();
+        let a = localStorage.getItem("site");
+        const rate = () => {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = $.parseJSON(xhttp.responseText);
+            if(response!="") {
+              console.log(response);
+              for (var iter = 0; iter < response.length; iter++) {
+                var newElem = document.getElementById('table1');
+                var newRow=newElem.insertRow(0);
+                var newCell0 = newRow.insertCell(0);
+                var newCell1 = newRow.insertCell(1);
+                var newCell2 = newRow.insertCell(2);
+                var newCell3 = newRow.insertCell(3);
+                var newCell4 = newRow.insertCell(4);
+                var newCell5 = newRow.insertCell(5);
+                newCell0.innerHTML=response[iter]['rate'];
+                newCell1.innerHTML=response[iter]['domen'];
+                newCell2.innerHTML=response[iter]['str'];
+                newCell3.innerHTML=response[iter]['pub'];
+                newCell4.innerHTML=response[iter]['link'];
+                newCell5.innerHTML=response[iter]['file'];
+
+                newElem.appendChild(newRow);
+              }
+            } else {
+              console.log(0);
+            }        
         }
-        else{
-            window.location='/auto.php';
-        }
-    }); 
+        };
+        obj = JSON.stringify({action:"data"});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+    rate();
     </script>
 </body>
 </html>

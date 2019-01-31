@@ -21,4 +21,8 @@ if($action=="avto"){
 	$response = $myClass->avto($json);
 	echo $response;
 }
+if($action=="data"){
+	$response = $myClass->data();
+	echo $response;
+}
 ?>
