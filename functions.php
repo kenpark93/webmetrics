@@ -108,24 +108,40 @@ function avto($json){
         preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $str=preg_replace("/[^x\d|*\.]/","",$pos);
+        if ($str == 0){
+            $que = "SELECT MAX(str) FROM pokaz where domen = $a";
+            $str = mysqli_query($conn, $que);
+        }
     }
     if ($c == 1){
         $text = file_get_contents( 'https://scholar.google.ru/scholar?hl=ru&as_sdt=0%2C5&q=' . $a );
         preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $pub=preg_replace("/[^x\d|*\.]/","",$pos);
+        if ($pub == 0){
+            $que = "SELECT MAX(pub) FROM pokaz where domen = $a";
+            $pub = mysqli_query($conn, $que);
+        }
     }
     if ($d == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=link:' . $a );
         preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $link=preg_replace("/[^x\d|*\.]/","",$pos);
+        if ($link == 0){
+            $que = "SELECT MAX(link) FROM pokaz where domen = $a";
+            $link = mysqli_query($conn, $que);
+        }
     }
     if ($e == 1){
         $text = file_get_contents( 'https://www.google.com/search?rlz=1C1GCEA_enRU774RU774&ei=jbVRXLv0JciyswGxlYjgAw&q=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&oq=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&gs_l=psy-ab.3...6311.39771..40939...0.0..0.147.488.9j1......0....2j1..gws-wiz.b1U7i4a0yHM');
         preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $file=preg_replace("/[^x\d|*\.]/","",$pos);
+        if ($file == 0){
+            $que = "SELECT MAX(file) FROM pokaz where domen = $a";
+            $file = mysqli_query($conn, $que);
+        }
     }
     global $db_param;
     $conn = connect_db($db_param);
@@ -140,7 +156,7 @@ function avto($json){
         $stmt->close();
     }
     
-    return $res;
+    return $str;
 }
 
 function data()
