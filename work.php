@@ -108,7 +108,7 @@
         }
         if (flag){
             prosm(a);
-            window.location='/rate.php';
+            //window.location='/rate.php';
         }
         flag = true;
     }); 

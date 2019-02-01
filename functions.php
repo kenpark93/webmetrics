@@ -85,16 +85,46 @@ function hand($json){
             echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
         }
         $a=$json->domen;
-        $b=$json->str;  
+        $b=$json->str;
+        if ($b == 0){
+            $que = "SELECT MAX(str) FROM pokaz where domain = $a";
+            $b = mysqli_query($conn, $que);
+        }  
         $c=$json->pub;
+        if ($c == 0){
+            $que = "SELECT MAX(pub) FROM pokaz where domain = $a";
+            $c = mysqli_query($conn, $que);
+        }
         $d=$json->link;
+        if ($d == 0){
+            $que = "SELECT MAX(link) FROM pokaz where domain = $a";
+            $d = mysqli_query($conn, $que);
+        }
         $e=$json->file;
+        if ($e == 0){
+            $que = "SELECT MAX(file) FROM pokaz where domain = $a";
+            $e = mysqli_query($conn, $que);
+        }
         $res =  $stmt->execute();       
         $stmt->close();
     }
-    
-    return $result;
+    //$que = "SELECT id FROM views where pokaz = $today AND domen = $l";
+    //$result = mysqli_query($conn, $que);
+    //$main = $b + $c + $d + $e;
+    //if ($conn != null) {
+    //    if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
+     //       echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+     //   }
+       // if(!$stmt->bind_param('sssss',$a,$b,$c,$d,$e)) {
+      //      echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+       // }
+       // $res =  $stmt->execute();       
+      //  $stmt->close();
+    //}
+    return $que;
 }
+
+
 
 function avto($json){
     $a=$json->domen;
@@ -109,7 +139,7 @@ function avto($json){
         $pos = $page[0];
         $str=preg_replace("/[^x\d|*\.]/","",$pos);
         if ($str == 0){
-            $que = "SELECT MAX(str) FROM pokaz where domen = $a";
+            $que = "SELECT MAX(str) FROM pokaz where domain = $a";
             $str = mysqli_query($conn, $que);
         }
     }
@@ -119,7 +149,7 @@ function avto($json){
         $pos = $page[0];
         $pub=preg_replace("/[^x\d|*\.]/","",$pos);
         if ($pub == 0){
-            $que = "SELECT MAX(pub) FROM pokaz where domen = $a";
+            $que = "SELECT MAX(pub) FROM pokaz where domain = $a";
             $pub = mysqli_query($conn, $que);
         }
     }
@@ -129,7 +159,7 @@ function avto($json){
         $pos = $page[0];
         $link=preg_replace("/[^x\d|*\.]/","",$pos);
         if ($link == 0){
-            $que = "SELECT MAX(link) FROM pokaz where domen = $a";
+            $que = "SELECT MAX(link) FROM pokaz where domain = $a";
             $link = mysqli_query($conn, $que);
         }
     }
@@ -139,7 +169,7 @@ function avto($json){
         $pos = $page[0];
         $file=preg_replace("/[^x\d|*\.]/","",$pos);
         if ($file == 0){
-            $que = "SELECT MAX(file) FROM pokaz where domen = $a";
+            $que = "SELECT MAX(file) FROM pokaz where domain = $a";
             $file = mysqli_query($conn, $que);
         }
     }
@@ -165,7 +195,7 @@ function data()
     $conn = connect_db($db_param);
 
     if ($conn != null) {
-        if(!($stmt=$conn->prepare("SELECT rate, domen, str, pub, link, file FROM rating, pokaz WHERE pokaz.id IN (SELECT MAX(pokaz.id) FROM pokaz GROUP BY pokaz.domain) AND pokaz.domain = rating.domen"))) {
+        if(!($stmt=$conn->prepare("SELECT rate, domen, str, pub, link, file FROM rating, pokaz WHERE pokaz.id IN (SELECT MAX(pokaz.id) FROM pokaz GROUP BY pokaz.domain) AND pokaz.domain = rating.domen ORDER BY rating.rate"))) {
             echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
         }
         if(!$stmt->execute()) {
