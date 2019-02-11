@@ -76,16 +76,18 @@ function putpose($json){
 
 function hand($json){
     global $db_param;
+    $today = date("Y-m-d");
     $conn = connect_db($db_param);
         if ($conn != null) {
-        if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
+        if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file,date) values(?,?,?,?,?,?)"))) {
             echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
         }
-        if(!$stmt->bind_param('sssss',$a,$b,$c,$d,$e)) {
+        if(!$stmt->bind_param('ssssss',$a,$b,$c,$d,$e,$d)) {
             echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
         }
         $a=$json->domen;
         $b=$json->str;
+        $d=$today;
         if ($b == 0){
             $que = "SELECT MAX(str) FROM pokaz where domain = $a";
             $b = mysqli_query($conn, $que);
@@ -105,23 +107,10 @@ function hand($json){
             $que = "SELECT MAX(file) FROM pokaz where domain = $a";
             $e = mysqli_query($conn, $que);
         }
-        $res =  $stmt->execute();       
+        $res = $stmt->execute();       
         $stmt->close();
     }
-    //$que = "SELECT id FROM views where pokaz = $today AND domen = $l";
-    //$result = mysqli_query($conn, $que);
-    //$main = $b + $c + $d + $e;
-    //if ($conn != null) {
-    //    if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
-     //       echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
-     //   }
-       // if(!$stmt->bind_param('sssss',$a,$b,$c,$d,$e)) {
-      //      echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
-       // }
-       // $res =  $stmt->execute();       
-      //  $stmt->close();
-    //}
-    return $que;
+    return $result;
 }
 
 
@@ -132,6 +121,7 @@ function avto($json){
     $c=$json->pub;
     $d=$json->link;
     $e=$json->file;
+    $today = date("Y-m-d");
     $la = 'https://www.google.com/search?rlz=1C1GCEA_enRU774RU774&ei=jbVRXLv0JciyswGxlYjgAw&q=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&oq=site%3A' . $a . '+filetype%3Apdf+OR+filetype%3Appt+OR+filetype%3Adoc&gs_l=psy-ab.3...6311.39771..40939...0.0..0.147.488.9j1......0....2j1..gws-wiz.b1U7i4a0yHM';
     if ($b == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=site:' . $a );
@@ -148,10 +138,6 @@ function avto($json){
         preg_match('/\s[\d]{0,}\s[\d]{3}/', $text, $page );
         $pos = $page[0];
         $pub=preg_replace("/[^x\d|*\.]/","",$pos);
-        if ($pub == 0){
-            $que = "SELECT MAX(pub) FROM pokaz where domain = $a";
-            $pub = mysqli_query($conn, $que);
-        }
     }
     if ($d == 1){
         $text = file_get_contents( 'https://www.google.com/search?q=link:' . $a );
@@ -176,10 +162,10 @@ function avto($json){
     global $db_param;
     $conn = connect_db($db_param);
         if ($conn != null) {
-        if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file) values(?,?,?,?,?)"))) {
+        if(!($stmt=$conn->prepare("insert into pokaz (domain,str,pub,link,file,date) values(?,?,?,?,?,?)"))) {
             echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
         }
-        if(!$stmt->bind_param('sssss',$a,$str,$pub,$link,$file)) {
+        if(!$stmt->bind_param('ssssss',$a,$str,$pub,$link,$file,$today)) {
             echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
         }
         $res =  $stmt->execute();       
@@ -195,9 +181,170 @@ function data()
     $conn = connect_db($db_param);
 
     if ($conn != null) {
-        if(!($stmt=$conn->prepare("SELECT rate, domen, str, pub, link, file FROM rating, pokaz WHERE pokaz.id IN (SELECT MAX(pokaz.id) FROM pokaz GROUP BY pokaz.domain) AND pokaz.domain = rating.domen ORDER BY rating.rate"))) {
+        if(!($stmt=$conn->prepare("SELECT rate, domen, str, pub, link, file FROM rating, pokaz WHERE pokaz.id IN (SELECT MAX(pokaz.id) FROM pokaz GROUP BY pokaz.domain) AND pokaz.domain = rating.domen ORDER BY rating.summ DESC"))) {
             echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
         }
+        if(!$stmt->execute()) {
+            echo "Не удалось выполнить запрос: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        if(!($res=$stmt->get_result())) {
+            echo "Не удалось получить результат: (" . $stmt->errno . ") " . $stmt->error;
+        } else {
+            if($res>0){
+                $gradInfo=array();
+                while($bi=mysqli_fetch_array($res))
+                    $gradInfo[]=$bi;                
+            } else {
+                return null;
+            }
+        }
+        $stmt->close();
+        return json_encode($gradInfo);
+    }
+}
+
+function putvisu($json)
+{
+    global $db_param;
+    $conn = connect_db($db_param);
+
+    if ($conn != null) {
+        if(!($stmt=$conn->prepare("SELECT str, pub, link, file, date FROM pokaz where domain=?"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('s',$l)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $l=$json->domen;
+        if(!$stmt->execute()) {
+            echo "Не удалось выполнить запрос: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        if(!($res=$stmt->get_result())) {
+            echo "Не удалось получить результат: (" . $stmt->errno . ") " . $stmt->error;
+        } else {
+            if($res>0){
+                $gradInfo=array();
+                while($bi=mysqli_fetch_array($res))
+                    $gradInfo[]=$bi;                
+            } else {
+                return null;
+            }
+        }
+        $stmt->close();
+        return json_encode($gradInfo);
+    }
+}
+
+function rating($json)
+{
+    global $db_param;
+    $conn = connect_db($db_param);
+
+    if ($conn != null) {
+        if(!($stmt=$conn->prepare("SELECT max(rate) FROM rating"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->execute()) {
+            echo "Не удалось выполнить запрос: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        if(!($res=$stmt->get_result())) {
+            echo "Не удалось получить результат: (" . $stmt->errno . ") " . $stmt->error;
+        } else {
+            if($res>0){
+                $gradInfo=array();
+                while($bi=mysqli_fetch_array($res))
+                    $gradInfo[]=$bi;                
+            } else {
+                return null;
+            }
+        }
+        $stmt->close();
+        return json_encode($gradInfo);
+    }
+}
+
+function ratingpok($json)
+{
+    global $db_param;
+    $conn = connect_db($db_param);
+
+    if ($conn != null) {
+        if(!($stmt=$conn->prepare("SELECT MAX(str), MAX(pub), MAX(link), MAX(file) FROM pokaz where domain=?"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('s',$l)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $l=$json->domen;
+        if(!$stmt->execute()) {
+            echo "Не удалось выполнить запрос: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        if(!($res=$stmt->get_result())) {
+            echo "Не удалось получить результат: (" . $stmt->errno . ") " . $stmt->error;
+        } else {
+            if($res>0){
+                $gradInfo=array();
+                while($bi=mysqli_fetch_array($res))
+                    $gradInfo[]=$bi;                
+            } else {
+                return null;
+            }
+        }
+        $stmt->close();
+        return json_encode($gradInfo);
+    }
+}
+
+function finale($json){
+    global $db_param;
+    $conn = connect_db($db_param);
+        if ($conn != null) {
+        if(!($stmt=$conn->prepare("insert into rating (rate, domen, summ) values(?,?,?)"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('sss',$a,$b,$c)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $a=$json->rate;
+        $b=$json->domen; 
+        $c=$json->summ;
+        $res = $stmt->execute();       
+        $stmt->close();
+    }
+    return $res;
+}
+
+function perepis($json){
+    global $db_param;
+    $conn = connect_db($db_param);
+        if ($conn != null) {
+        if(!($stmt=$conn->prepare("UPDATE rating SET summ = ? WHERE domen = ?"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('ss',$c,$b)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $b=$json->domen; 
+        $c=$json->summ;
+        $res = $stmt->execute();       
+        $stmt->close();
+    }
+    return $res;
+}
+
+function proverka($json)
+{
+    global $db_param;
+    $conn = connect_db($db_param);
+
+    if ($conn != null) {
+        if(!($stmt=$conn->prepare("SELECT id FROM rating where domen=?"))) {
+            echo "Не удалось подготовить запрос: (" . $conn->errno . ") " . $conn->error;
+        }
+        if(!$stmt->bind_param('s',$l)) {
+            echo "Не удалось привязать параметры: (" . $stmt->errno . ") " . $stmt->error;
+        }
+        $l=$json->domen;
         if(!$stmt->execute()) {
             echo "Не удалось выполнить запрос: (" . $stmt->errno . ") " . $stmt->error;
         }

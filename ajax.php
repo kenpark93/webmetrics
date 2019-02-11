@@ -13,6 +13,10 @@ if($action=="putpose"){
 	$response = $myClass->putpose($json);
 	echo $response;
 }
+if($action=="putvisu"){
+	$response = $myClass->putvisu($json);
+	echo $response;
+}
 if($action=="hand"){
 	$response = $myClass->hand($json);
 	echo $response;
@@ -23,6 +27,26 @@ if($action=="avto"){
 }
 if($action=="data"){
 	$response = $myClass->data();
+	echo $response;
+}
+if($action=="rating"){
+	$response = $myClass->rating($json);
+	echo $response;
+}
+if($action=="ratingpok"){
+	$response = $myClass->ratingpok($json);
+	echo $response;
+}
+if($action=="final"){
+	$response = $myClass->finale($json);
+	echo $response;
+}
+if($action=="proverka"){
+	$response = $myClass->proverka($json);
+	echo $response;
+}
+if($action=="perepis"){
+	$response = $myClass->perepis($json);
 	echo $response;
 }
 ?>

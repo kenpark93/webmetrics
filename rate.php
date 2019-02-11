@@ -40,10 +40,12 @@
   </tbody>
 </table>
 <br><br><br>
-      <button id="autoras" type="button" class="btn btn-success btn-block">Визуализации рейтинга</button>
+      <button id="visu" type="button" class="btn btn-success btn-block">Визуализации рейтинга</button>
     </div>
     <script type="text/javascript">
         let a = localStorage.getItem("site");
+        let summ = localStorage.getItem("summ");
+        let maxrate = localStorage.getItem("maxrate");
         const rate = () => {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function(){
@@ -60,7 +62,7 @@
                 var newCell3 = newRow.insertCell(3);
                 var newCell4 = newRow.insertCell(4);
                 var newCell5 = newRow.insertCell(5);
-                newCell0.innerHTML=response[iter]['rate'];
+                newCell0.innerHTML=iter+1;
                 newCell1.innerHTML=response[iter]['domen'];
                 newCell2.innerHTML=response[iter]['str'];
                 newCell3.innerHTML=response[iter]['pub'];
@@ -79,7 +81,66 @@
         xhttp.setRequestHeader("Content-Type","application/json");
         xhttp.send(obj);
     };
+    const final = () => {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = xhttp.responseText;
+            if(response!=null) {
+              console.log(response);
+              location.reload();
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"final",domen:a,rate:maxrate,summ:summ});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+    const perepis = () => {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = xhttp.responseText;
+            if(response!=null) {
+              console.log(response);
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"perepis",domen:a,summ:summ});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+    const proverka = () => {
+      console.log(a);
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = xhttp.responseText;
+            if(response.length > 2) {
+              console.log(response.length);
+              perepis();
+            } else {
+              console.log(0);
+              final();
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"proverka",domen:a});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+    proverka();
     rate();
+    $("#visu").on('click',function(){
+        window.location='/visu.php';
+    });  
     </script>
 </body>
 </html>

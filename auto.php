@@ -62,6 +62,8 @@
         var link = document.getElementById("link");
         var pub = document.getElementById("pub");
         var file = document.getElementById("file");
+        var maxrate = 0;
+        var summ = 0;
         console.log(a);
         $("#autoras").on('click',function(){
         if (str.checked){
@@ -90,6 +92,8 @@
         }
         console.log(str + " " + link + " " + pub + " " + file);
         auutoo(a, str, link, pub, file);
+        rating();
+        ratingpok(a);
         window.location='/rate.php';
     }); 
         const auutoo = (a, str, link, pub, file) => {
@@ -106,6 +110,47 @@
         }
       };
         obj = JSON.stringify({action:"avto",domen:a,str:str,pub:pub,link:link,file:file});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+    const rating = () => {
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = $.parseJSON(xhttp.responseText);
+            if(response!=null) {
+              console.log(response[0][0]);
+              maxrate = response[0][0] + 1;
+              localStorage.setItem("maxrate", maxrate);
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"rating",domen:a});
+        xhttp.open("POST", 'ajax.php', true);
+        xhttp.setRequestHeader("Content-Type","application/json");
+        xhttp.send(obj);
+    };
+
+    const ratingpok = (a) => {
+      var xhttp = new XMLHttpRequest();
+      console.log(maxrate);
+      xhttp.onreadystatechange = function(){
+        if (xhttp.readyState==4 && xhttp.status==200) {
+            var response = $.parseJSON(xhttp.responseText);
+            if(response!=null) {
+              console.log(response);
+              summ = 0.05 * response[0][0] + 0.35 * response[0][1] + 0.5 * response[0][2] + 0.1 * response[0][3];
+              console.log(summ);
+              localStorage.setItem("summ", summ);
+            } else {
+              console.log(0);
+            }        
+        }
+      };
+        obj = JSON.stringify({action:"ratingpok",domen:a});
         xhttp.open("POST", 'ajax.php', true);
         xhttp.setRequestHeader("Content-Type","application/json");
         xhttp.send(obj);
