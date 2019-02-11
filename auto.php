@@ -49,7 +49,7 @@
             <div class="param">
                 <form>
                     <div>
-                        <label><input type="checkbox" id="file"/> Колличество файлов</label>
+                        <label><input type="checkbox" id="file"/> Количество файлов</label>
                     </div>
                 </form>
             </div>
